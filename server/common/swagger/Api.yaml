@@ -1,0 +1,100 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Hero api
+  description: Nice API
+basePath: /heroes
+tags:
+  - name: Heroes
+    description: CRUD Heroes
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+definitions:
+  HeroBody:
+    type: object
+    title: Heroes
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        description: Name of heroes
+paths:
+  /:
+    get:
+      tags:
+        - Heroes
+      description: Fetch all Heroes
+      responses:
+        200:
+          description: Returns all heroes
+    post:
+      tags:
+        - Heroes
+      description: Create a new hero
+      parameters:
+        - name: body
+          in: body
+          description: name
+          required: true
+          schema: 
+            $ref: "#/definitions/HeroBody"
+      responses:
+        201:
+          description: Returns Hero
+
+  /{_id}:
+    get:
+      tags:
+        - Heroes
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: The _id of the entity to retrieve
+          type: string
+      responses:
+        200:
+          description: Return the hero with the specified _id
+        404:
+          description: Don't know any hero with this _id
+    put:
+      tags:
+        - Heroes
+      description: Update hero
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: The _id of the entity to retrieve
+          type: string
+        - name: body
+          in: body
+          description: name
+          required: true
+          schema:
+            $ref: "#/definitions/HeroBody"
+      responses:
+        200:
+          description: Returns String
+        404:
+          description: Don't know any hero with this _id
+    delete:
+      tags:
+        - Heroes
+      description: Delete hero
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: The _id of the entity to delete
+          type: string
+      responses:
+        200:
+          description: Returns String
+        404:
+          description: Don't know any hero with this _id
