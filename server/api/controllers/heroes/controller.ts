@@ -25,7 +25,7 @@ export class Controller {
                 return res.status(404).send(err);
             }
             if(heroes.length === 0){
-                l.info("get 0 heroes");
+                l.info("get 0 hero");
                 return res.status(204).send();
             }
             l.info("get "+ heroes.length + " heroes");
