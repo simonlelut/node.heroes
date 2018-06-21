@@ -10,12 +10,25 @@ export class Controller {
 
     heroes(req: Request, res: Response): void {
 
-        Heroes.find().lean().exec((err: Error, heroes:  HeroesModel[]) =>{
-            if(err){
+        let name = req.query.name
+        let heroes = null;
+        
+        if(name){
+            heroes =  Heroes.find({name: new RegExp(name, "i")});
+        }
+        else
+            heroes =  Heroes.find();
+
+       heroes.lean().exec((err: Error, heroes:  HeroesModel[]) =>{
+            if(err ){
                 l.error(err);
                 return res.status(404).send(err);
             }
-            l.info("get all heroes");
+            if(heroes.length === 0){
+                l.info("get 0 heroes");
+                return res.status(204).send();
+            }
+            l.info("get "+ heroes.length + " heroes");
             res.status(200).json(heroes);
         });
     }
@@ -46,6 +59,8 @@ export class Controller {
 
     heroUpdate(req: Request, res: Response): void {
 
+        console.log(req.body)
+
         if(req.body.name){
 
             const hero = {
@@ -55,7 +70,7 @@ export class Controller {
             Heroes.update({_id : hero_find._id}, hero , (err: Error) => {
                 if(err){
                     l.error(err);
-                    res.status(404).send(err);
+                    return res.status(404).send(err);
                 }
 
                 l.info("Update hero " + hero_find._id);
